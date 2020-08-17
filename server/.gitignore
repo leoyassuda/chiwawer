@@ -1,1 +1,3 @@
 .vercel
+server/node_modules
+server/.env
