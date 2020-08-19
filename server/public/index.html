@@ -3,23 +3,88 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Short urls</title>
+    <title>Chiwawer - Shortner urls</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <header>
-      <h1>Shortner Urls for your code</h1>
-    </header>
-    <main id="app">
-      <form @submit.prevent="createUrl()">
-        <label for="url">Url</label>
-        <input v-model="url" name="url" id="url" type="url" />
-        <label for="slug">Slug</label>
-        <input v-model="slug" name="slug" id="slug" type="text" />
-        <button type="submit">Create</button>
-      </form>
-    </main>
+  <body
+    class="font-sans antialiased leading-normal tracking-wider bg-auto"
+    style="
+      background-image: url('https://images.unsplash.com/photo-1554034483-04fda0d3507b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
+    "
+  >
+    <div class="container mx-auto">
+      <header>
+        <h1 class="text-center text-gray-100 text-5xl">Simple Shortner Urls</h1>
+      </header>
+      <main id="app" class="mx-auto">
+        <!-- main div -->
+        <div class="w-full max-w-xl mx-auto mt-10">
+          <div v-if="error" class="error">
+            {{error}}
+          </div>
+          <form
+            @submit.prevent="createUrl()"
+            class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          >
+            <div class="flex items-center border-b border-teal-500 py-2">
+              <input
+                v-model="url"
+                type="url"
+                placeholder="Enter a URL"
+                aria-label="url"
+                class="appearance-none bg-transparent border-none w-full text-gray-400 mr-3 py-1 px-2 leading-tight focus:outline-none"
+              />
+            </div>
+            <div class="flex items-center border-b border-teal-500 py-2">
+              <input
+                v-model="alias"
+                type="text"
+                placeholder="Alias for your URL"
+                aria-label="Alias"
+                maxlength="5"
+                class="appearance-none bg-transparent border-none w-full text-gray-400 mr-3 py-1 px-2 leading-tight focus:outline-none"
+              />
+            </div>
+            <div class="flex items-center justify-end mt-5">
+              <button
+                type="submit"
+                class="bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 border-b-4 border-teal-700 hover:border-teal-500 rounded"
+              >
+                Create
+              </button>
+            </div>
+            <div v-if="created">
+              <p class="created">
+                Your short url is: <a :href="created">{{created}}</a>
+              </p>
+            </div>
+          </form>
+          <p class="text-center ext-gray-100 text-gray-100 text-xs">
+            &copy;2020 leoyas. All rights reserved.
+          </p>
+        </div>
+      </main>
+
+      <!-- Pin to top right corner -->
+      <div
+        id="buttonTheme"
+        data-tippy-content="Change theme mode"
+        class="absolute top-0 right-0 h-12 w-18 p-4"
+      >
+        <button class="js-change-theme focus:outline-none">☀️</button>
+      </div>
+    </div>
     <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

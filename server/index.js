@@ -5,6 +5,8 @@ const cors = require("cors");
 const morgan = require("morgan");
 const yup = require("yup");
 const monk = require("monk");
+const rateLimit = require("express-rate-limit");
+const slowDown = require("express-slow-down");
 const { nanoid } = require("nanoid");
 
 require("dotenv").config();
@@ -13,7 +15,7 @@ const db = monk(process.env.MONGO_URI);
 const urls = db.get("urls");
 urls.createIndex(
   {
-    slug: 1,
+    alias: 1,
   },
   {
     unique: true,
@@ -21,77 +23,79 @@ urls.createIndex(
 );
 
 const app = express();
-app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+app.use(favicon(path.join(__dirname, "public", "ico/favicon.ico")));
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("./public"));
 
-// app.get("/", (req, res) => {
-//   res.json({
-//     message: "shortfy-url | Short Urls for your",
-//   });
-// });
-
-// app.get("/url/:id", (req, res) => {
-//   // TODO: get short url by id
-// });
+const notFoundPath = path.join(__dirname, "public/404.html");
 
 app.get("/:id", async (req, res, next) => {
-  const { id: slug } = req.params;
-
-  console.log(">>> params: ", req.params);
-
+  const { id: alias } = req.params;
   try {
-    const url = await urls.findOne({
-      slug,
-    });
-
-    console.log(">>> slog:", slug);
-    console.log(">>> url:", url);
-
+    const url = await urls.findOne({ alias });
     if (url) {
-      console.log(">>>>>>>>>>>>>> url:", url.url);
-      res.redirect(url.url);
+      return res.redirect(url.url);
     }
-    res.redirect(`/?error=${slug} not found`);
+    return res.status(404).sendFile(notFoundPath);
   } catch (error) {
-    console.log("<<<<<< error", error);
-    res.redirect(`/?error=Link not found`);
+    return res.status(404).sendFile(notFoundPath);
   }
 });
 
 const schema = yup.object().shape({
-  slug: yup
+  alias: yup
     .string()
     .trim()
-    .matches(/[\w\-]/i),
+    .matches(/^[\w\-]+$/i),
   url: yup.string().trim().url().required(),
 });
 
-app.post("/url", async (req, res, next) => {
-  let { slug, url } = req.body;
-  try {
-    await schema.validate({
-      slug,
-      url,
-    });
-    if (!slug) {
-      slug = nanoid(5);
+app.post(
+  "/url",
+  slowDown({
+    windowMs: 30 * 1000,
+    delayAfter: 1,
+    delayMs: 500,
+  }),
+  rateLimit({
+    windowMs: 30 * 1000,
+    max: 1,
+  }),
+  async (req, res, next) => {
+    let { alias, url } = req.body;
+    try {
+      await schema.validate({
+        alias,
+        url,
+      });
+      if (url.includes("https://shortner-url.vercel.app")) {
+        throw new Error("Stop it. 🛑");
+      }
+      if (!alias) {
+        alias = nanoid(5);
+      } else {
+        const existing = await urls.findOne({ alias });
+        if (existing) {
+          throw new Error("Alias in use. 🍔");
+        }
+      }
+      alias = alias.toLowerCase();
+      const newUrl = {
+        url,
+        alias,
+      };
+      const created = await urls.insert(newUrl);
+      res.json(created);
+    } catch (error) {
+      next(error);
     }
-    slug = slug.toLowerCase();
-    const newUrl = {
-      url,
-      slug,
-    };
-    const created = await urls.insert(newUrl);
-    res.json(created);
-  } catch (error) {
-    if (error.message.startsWith("E11000")) {
-      error.message = "Slug in use. 🍔";
-    }
-    next(error);
   }
+);
+
+app.use((req, res, next) => {
+  res.status(404).sendFile(notFoundPath);
 });
 
 app.use((error, req, res, next) => {
