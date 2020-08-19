@@ -21,6 +21,7 @@ const app = new Vue({
           alias: this.alias || undefined,
         }),
       });
+      console.log("response", response);
       if (response.ok) {
         const result = await response.json();
         const href = document.location.href;

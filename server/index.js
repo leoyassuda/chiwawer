@@ -83,6 +83,8 @@ app.post(
   }),
   async (req, res, next) => {
     let { alias, url } = req.body;
+    console.log(">>>>>>>>> alias", alias);
+    console.log(">>>>>>>>> url", url);
     try {
       await schema.validate({
         alias,
@@ -105,8 +107,10 @@ app.post(
         alias,
       };
       const created = await urls.insert(newUrl);
+      console.log("created", created);
       res.json(created);
     } catch (error) {
+      console.log("error", error);
       next(error);
     }
   }
