@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const favicon = require("serve-favicon");
 const path = require("path");
-const cors = require("cors");
+// const cors = require("cors");
 const morgan = require("morgan");
 const yup = require("yup");
 const monk = require("monk");
@@ -14,6 +14,11 @@ require("dotenv").config();
 
 const db = monk(process.env.MONGO_URI);
 const urls = db.get("urls");
+
+db.then(() => {
+  console.log(">>> Connected correctly to server <<<");
+});
+
 urls.createIndex(
   {
     alias: 1,
@@ -23,35 +28,34 @@ urls.createIndex(
   }
 );
 
-const sessionConfig = {
-  secret: "roufroufrouf",
-  name: "chiwawer",
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    sameSite: "strict",
-  },
-};
+// const sessionConfig = {
+//   name: "chiwawer",
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     sameSite: "strict",
+//   },
+// };
 
 const app = express();
 
-if (process.env.NODE_ENV === "production") {
-  app.set("trust proxy", 1); // trust first proxy
-  sessionConfig.cookie.secure = true; // serve secure cookies
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.set("trust proxy", 1); // trust first proxy
+//   sessionConfig.cookie.secure = true; // serve secure cookies
+// }
 
-const allowlist = ["http://localhost", "https://chiwawer.vercel.app"];
+// const allowlist = ["http://localhost", "https://chiwawer.vercel.app"];
 
-app.use((req, res, next) => {
-  //Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
-  res.header("Access-Control-Allow-Origin", "*");
-  //Quais são os métodos que a conexão pode realizar na API
-  res.header("Access-Control-Allow-Methods", "GET,POST");
-  app.use(cors());
-  next();
-});
+// app.use((req, res, next) => {
+//   //Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
+//   res.header("Access-Control-Allow-Origin", "*");
+//   //Quais são os métodos que a conexão pode realizar na API
+//   res.header("Access-Control-Allow-Methods", "GET,POST");
+//   app.use(cors());
+//   next();
+// });
 
-app.use(session(sessionConfig));
+// app.use(session(sessionConfig));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(morgan("tiny"));
 app.use(express.json());
@@ -105,6 +109,7 @@ app.post(
       }
       if (!alias) {
         alias = nanoid(5);
+        console.log(">>> nanoid", alias);
       } else {
         const existing = await urls.findOne({ alias });
         if (existing) {
