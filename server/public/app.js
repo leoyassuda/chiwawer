@@ -44,6 +44,8 @@ tippy("#buttonTheme", {
 
 //Toggle mode
 const toggle = document.querySelector(".js-change-theme");
+const title = document.getElementById("title");
+const copyright = document.getElementById("copyright");
 const input = document.querySelector("input");
 const form = document.querySelector("form");
 
@@ -54,11 +56,19 @@ toggle.addEventListener("click", () => {
     input.classList.add("text-gray-400");
     form.classList.remove("bg-white");
     form.classList.add("bg-gray-800");
+    title.classList.remove("text-gray-900");
+    title.classList.add("text-gray-100");
+    copyright.classList.remove("text-gray-900");
+    copyright.classList.add("text-gray-100");
   } else {
     toggle.innerHTML = "🌙";
     input.classList.remove("text-gray-400");
     input.classList.add("text-gray-900");
     form.classList.remove("bg-gray-800");
     form.classList.add("bg-white");
+    title.classList.remove("text-gray-100");
+    title.classList.add("text-gray-900");
+    copyright.classList.remove("text-gray-100");
+    copyright.classList.add("text-gray-900");
   }
 });

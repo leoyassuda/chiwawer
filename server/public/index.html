@@ -15,14 +15,19 @@
     />
   </head>
   <body
-    class="font-sans antialiased leading-normal tracking-wider bg-auto"
+    class="h-screen antialiased leading-normal tracking-wider bg-auto"
     style="
       background-image: url('https://images.unsplash.com/photo-1554034483-04fda0d3507b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80');
     "
   >
     <div class="container mx-auto">
       <header>
-        <h1 class="text-center text-gray-100 text-5xl">Simple Shortner Urls</h1>
+        <h1
+          id="title"
+          class="text-2xl text-center text-gray-100 mt-5 md:text-4xl"
+        >
+          Simple Shortner Urls
+        </h1>
       </header>
       <main id="app" class="mx-auto">
         <!-- main div -->
@@ -32,7 +37,7 @@
           </div>
           <form
             @submit.prevent="createUrl()"
-            class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+            class="m-5 p-5 bg-gray-800 shadow-md rounded md:px-8 md:pt-6 md:pb-8 md:mb-4"
           >
             <div class="flex items-center border-b border-teal-500 py-2">
               <input
@@ -88,7 +93,7 @@
               </div>
             </div>
           </form>
-          <p class="text-center ext-gray-100 text-gray-100 text-xs">
+          <p id="copyright" class="text-center text-gray-100 text-xs">
             &copy;2020 leoyas. All rights reserved.
           </p>
         </div>

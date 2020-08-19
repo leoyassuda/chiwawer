@@ -7,3 +7,7 @@
 body {
   font-family: "Source Sans Pro", sans-serif;
 }
+
+#copyright {
+  font-weight: 600;
+}
