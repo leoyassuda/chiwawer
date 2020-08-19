@@ -40,6 +40,17 @@ if (process.env.NODE_ENV === "production") {
   sessionConfig.cookie.secure = true; // serve secure cookies
 }
 
+const allowlist = ["http://localhost", "https://chiwawer.vercel.app"];
+
+app.use((req, res, next) => {
+  //Qual site tem permissão de realizar a conexão, no exemplo abaixo está o "*" indicando que qualquer site pode fazer a conexão
+  res.header("Access-Control-Allow-Origin", allowlist);
+  //Quais são os métodos que a conexão pode realizar na API
+  res.header("Access-Control-Allow-Methods", "GET,POST");
+  app.use(cors());
+  next();
+});
+
 app.use(session(sessionConfig));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(morgan("tiny"));
