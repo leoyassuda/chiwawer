@@ -88,7 +88,7 @@ app.post(
         alias,
         url,
       });
-      if (url.includes("https://shortner-url.vercel.app")) {
+      if (url.includes("https://shortner-urls.vercel.app")) {
         throw new Error("Stop it. 🛑");
       }
       if (!alias) {
