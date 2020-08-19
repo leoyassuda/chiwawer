@@ -41,7 +41,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(session(sessionConfig));
-app.use(favicon(path.join(__dirname, "public", "ico/favicon.ico")));
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
@@ -88,7 +88,7 @@ app.post(
         alias,
         url,
       });
-      if (url.includes("https://shortner-urls.vercel.app")) {
+      if (url.includes("https://chiwawer.vercel.app")) {
         throw new Error("Stop it. 🛑");
       }
       if (!alias) {
