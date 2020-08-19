@@ -54,7 +54,6 @@ app.use((req, res, next) => {
 app.use(session(sessionConfig));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(morgan("tiny"));
-app.use(cors());
 app.use(express.json());
 app.use(express.static("./public"));
 
