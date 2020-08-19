@@ -23,8 +23,9 @@ const app = new Vue({
       });
       if (response.ok) {
         const result = await response.json();
+        const href = document.location.href;
         this.formVisible = false;
-        this.created = `https://shortner-url.vercel.app/${result.alias}`;
+        this.created = `${href}${result.alias}`;
       } else if (response.status === 429) {
         this.error =
           "You are sending too many requests. Try again in 30 seconds.";

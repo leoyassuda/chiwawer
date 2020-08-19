@@ -26,7 +26,7 @@
       </header>
       <main id="app" class="mx-auto">
         <!-- main div -->
-        <div class="w-full max-w-xl mx-auto mt-10">
+        <div class="w-full max-w-2xl mx-auto mt-10">
           <div v-if="error" class="error">
             {{error}}
           </div>
@@ -61,23 +61,20 @@
                 Create
               </button>
             </div>
-          </form>
-          <p class="text-center ext-gray-100 text-gray-100 text-xs">
-            &copy;2020 leoyas. All rights reserved.
-          </p>
-          <div v-if="created" class="bt-8">
-            <p>Your short url is: <a :href="created">{{created}}</a></p>
-            <div class="bg-indigo-900 text-center py-4 mx:px-4">
+            <div
+              v-if="created"
+              class="text-center rounded-md mt-10 py-4 mx:px-4"
+            >
               <div
-                class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex"
+                class="p-2 bg-indigo-500 items-center text-indigo-100 leading-none rounded-full flex inline-flex"
                 role="alert"
               >
                 <span
-                  class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3"
-                  >New</span
-                >
+                  class="flex rounded-full bg-indigo-800 uppercase px-2 py-1 text-xs font-bold mr-3"
+                  >Your short url is:
+                </span>
                 <span class="font-semibold mr-2 text-left flex-auto"
-                  >{{created}}</span
+                  ><a :href="created">{{created}}</a></span
                 >
                 <svg
                   class="fill-current opacity-75 h-4 w-4"
@@ -90,7 +87,10 @@
                 </svg>
               </div>
             </div>
-          </div>
+          </form>
+          <p class="text-center ext-gray-100 text-gray-100 text-xs">
+            &copy;2020 leoyas. All rights reserved.
+          </p>
         </div>
       </main>
 
