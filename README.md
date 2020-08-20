@@ -30,7 +30,6 @@ npm run dev
 > / = home with form to create shortner URLs
 >
 > /{id} = (GET) return a json with attributes URL and alias.
->
 
 ---
 
@@ -56,4 +55,4 @@ npm run dev
 
 ## Authors
 
-- **Leo Yassuda** - _Initial work_ - [Proxy-Api](https://github.com/leoyassuda/chiwawer)
+- **Leo Yassuda** - _Initial work_ - [Chiwawer-Shortner-Urls](https://github.com/leoyassuda/chiwawer)
