@@ -1,14 +1,11 @@
 {
-  "routes": [
-    {
-      "src": "/url/(?<id>[^/]+)",
-      "methods": ["POST"],
-      "dest": "/index.js/$id"
-    },
-    {
-      "src": "/(?<id>[^/]+)",
-      "methods": ["GET"],
-      "dest": "/index.js/$id"
-    }
-  ]
+  "version": 2,
+  "builds": [{
+    "src": "index.js",
+    "use": "@now/node-server"
+  }],
+  "routes": [{
+    "src": "/.*",
+    "dest": "/index.js"
+  }]
 }
