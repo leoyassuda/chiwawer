@@ -1,10 +1,8 @@
-const path = require("path");
 const logger = require("pino")();
 const monk = require("monk");
 
 require("dotenv").config();
 
-const notFoundPath = path.join(__dirname, "public/404.html");
 const db = monk(process.env.MONGO_URI);
 const urls = db.get("urls");
 
@@ -41,10 +39,9 @@ module.exports = async (req, res) => {
   });
 
   try {
-    const url = await urls.findOne({
+    return urls.findOne({
       alias,
     });
-    return url;
   } catch (error) {
     logger.error({
       api: {
