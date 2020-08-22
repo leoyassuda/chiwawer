@@ -40,7 +40,7 @@ const schema = yup.object().shape({
 });
 
 module.exports = async (req, res) => {
-    const {
+    let {
         alias,
         url
     } = req.body;
