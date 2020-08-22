@@ -4,8 +4,6 @@ const monk = require("monk");
 const {
     nanoid
 } = require("nanoid");
-const rateLimit = require("express-rate-limit");
-const slowDown = require("express-slow-down");
 
 require("dotenv").config();
 
@@ -41,7 +39,7 @@ const schema = yup.object().shape({
     url: yup.string().trim().url().required(),
 });
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res) => {
     const {
         alias,
         url
@@ -98,7 +96,7 @@ module.exports = async (req, res, next) => {
                 tag: "db"
             },
         });
-        next(error);
+        throw new Error(error);
     } finally {
         db.close();
     }
