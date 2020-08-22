@@ -39,9 +39,24 @@ module.exports = async (req, res) => {
   });
 
   try {
-    return urls.findOne({
+    const url = await urls.findOne({
       alias,
     });
+
+    logger.info({
+      db: {
+        message: "api get url by alias",
+        location: "api/alias/[alias].js",
+        method: "findOne",
+        data: url,
+      },
+      event: {
+        type: "request",
+        tag: "db",
+      },
+    });
+
+    return url;
   } catch (error) {
     logger.error({
       api: {
