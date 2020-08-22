@@ -1,3 +1,3 @@
 module.exports = (req, res) => {
-    res.send('Hello world from the /api route!')
+    res.send('Rouf! Hi there from the /api route!');
 }

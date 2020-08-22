@@ -81,7 +81,6 @@ module.exports = async (req, res) => {
                 tag: "db"
             },
         });
-
         res.json(created);
     } catch (error) {
         logger.error({
