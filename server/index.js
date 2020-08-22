@@ -27,6 +27,20 @@ const notFoundPath = path.join(__dirname, "public/404.html");
 
 app.get("/:id", async (req, res, next) => {
   const { id: alias } = req.params;
+  
+  logger.info({
+    db: {
+        message: "Get url bt Alias",
+        location: "server/index.js",
+        method: "get by alias",
+        data: alias,
+    },
+    event: {
+        type: "request",
+        tag: "server"
+    },
+});
+
   try {
     await fetch(`/api/alias/${alias}`)
       .then(function (response) {
