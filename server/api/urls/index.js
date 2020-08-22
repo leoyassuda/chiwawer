@@ -96,7 +96,10 @@ module.exports = async (req, res) => {
                 tag: "db"
             },
         });
-        throw new Error(error);
+        res.status(500).send({
+            message: 'Something is wrong to create a url',
+            error: error,
+        });
     } finally {
         db.close();
     }
