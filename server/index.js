@@ -8,7 +8,9 @@ const yup = require("yup");
 const monk = require("monk");
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
-const { nanoid } = require("nanoid");
+const {
+  nanoid
+} = require("nanoid");
 
 require("dotenv").config();
 
@@ -19,14 +21,11 @@ db.then(() => {
   console.log(">>> Connected correctly to server <<<");
 });
 
-urls.createIndex(
-  {
-    alias: 1,
-  },
-  {
-    unique: true,
-  }
-);
+urls.createIndex({
+  alias: 1,
+}, {
+  unique: true,
+});
 
 const sessionConfig = {
   name: "chiwawer",
@@ -64,9 +63,13 @@ app.use(express.static("./public"));
 const notFoundPath = path.join(__dirname, "public/404.html");
 
 app.get("/:id", async (req, res, next) => {
-  const { id: alias } = req.params;
+  const {
+    id: alias
+  } = req.params;
   try {
-    const url = await urls.findOne({ alias });
+    const url = await urls.findOne({
+      alias
+    });
     if (url) {
       return res.redirect(url.url);
     }
@@ -96,7 +99,14 @@ app.post(
     max: 1,
   }),
   async (req, res, next) => {
-    let { alias, url } = req.body;
+
+    console.log(`This response will send details about the ${req.query}.`);
+    console.log(req.query);
+
+    let {
+      alias,
+      url
+    } = req.body;
     console.log(">>>>>>>>> alias", alias);
     console.log(">>>>>>>>> url", url);
     try {
@@ -111,7 +121,9 @@ app.post(
         alias = nanoid(5);
         console.log(">>> nanoid", alias);
       } else {
-        const existing = await urls.findOne({ alias });
+        const existing = await urls.findOne({
+          alias
+        });
         if (existing) {
           throw new Error("Alias in use. 🍔");
         }
