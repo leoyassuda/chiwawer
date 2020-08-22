@@ -27,6 +27,19 @@ db.then(() => {
 module.exports = async (req, res) => {
   const alias = req.query.alias;
 
+  logger.info({
+    db: {
+      message: "api get url by alias",
+      location: "api/alias/[alias].js",
+      method: "find by alias",
+      data: alias,
+    },
+    event: {
+      type: "request",
+      tag: "api",
+    },
+  });
+
   try {
     const url = await urls.findOne({
       alias,

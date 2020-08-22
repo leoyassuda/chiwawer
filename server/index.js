@@ -27,25 +27,25 @@ const notFoundPath = path.join(__dirname, "public/404.html");
 
 app.get("/:id", async (req, res, next) => {
   const { id: alias } = req.params;
-  
+
   logger.info({
     db: {
-        message: "Get url bt Alias",
-        location: "server/index.js",
-        method: "get by alias",
-        data: alias,
+      message: "Get url bt Alias",
+      location: "server/index.js",
+      method: "get by alias",
+      data: alias,
     },
     event: {
-        type: "request",
-        tag: "server"
+      type: "request",
+      tag: "server",
     },
-});
+  });
 
   try {
     await fetch(`/api/alias/${alias}`)
       .then(function (response) {
         if (response.ok) {
-          const result = await response.json();
+          const result = response.json();
           return res.redirect(result.url);
         } else {
           return res.status(404).sendFile(notFoundPath);
@@ -54,16 +54,16 @@ app.get("/:id", async (req, res, next) => {
       .catch(function (error) {
         logger.error({
           api: {
-              message: "Error to fetch url by alias",
-              location: "server/index.js",
-              method: "get[id]",
-              stack: error,
+            message: "Error to fetch url by alias",
+            location: "server/index.js",
+            method: "get[id]",
+            stack: error,
           },
           event: {
-              type: "request",
-              tag: "server"
+            type: "request",
+            tag: "server",
           },
-      });
+        });
         return res.status(404).sendFile(notFoundPath);
       });
   } catch (error) {
