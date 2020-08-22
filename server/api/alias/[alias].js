@@ -39,9 +39,14 @@ module.exports = async (req, res) => {
   });
 
   try {
-    const url = await urls.findOne({
-      alias,
-    });
+    const url = await urls.findOne(
+      {
+        alias,
+      },
+      {
+        timeout: false,
+      }
+    );
 
     logger.info({
       db: {
