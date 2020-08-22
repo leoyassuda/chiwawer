@@ -14,19 +14,6 @@ const {
 
 require("dotenv").config();
 
-const db = monk(process.env.MONGO_URI);
-const urls = db.get("urls");
-
-db.then(() => {
-  console.log(">>> Connected correctly to server <<<");
-});
-
-urls.createIndex({
-  alias: 1,
-}, {
-  unique: true,
-});
-
 const sessionConfig = {
   name: "chiwawer",
   resave: false,
@@ -62,86 +49,86 @@ app.use(express.static("./public"));
 
 const notFoundPath = path.join(__dirname, "public/404.html");
 
-app.get("/:id", async (req, res, next) => {
-  const {
-    id: alias
-  } = req.params;
-  try {
-    const url = await urls.findOne({
-      alias
-    });
-    if (url) {
-      return res.redirect(url.url);
-    }
-    return res.status(404).sendFile(notFoundPath);
-  } catch (error) {
-    return res.status(404).sendFile(notFoundPath);
-  }
-});
+// app.get("/:id", async (req, res, next) => {
+//   const {
+//     id: alias
+//   } = req.params;
+//   try {
+//     const url = await urls.findOne({
+//       alias
+//     });
+//     if (url) {
+//       return res.redirect(url.url);
+//     }
+//     return res.status(404).sendFile(notFoundPath);
+//   } catch (error) {
+//     return res.status(404).sendFile(notFoundPath);
+//   }
+// });
 
-const schema = yup.object().shape({
-  alias: yup
-    .string()
-    .trim()
-    .matches(/^[\w\-]+$/i),
-  url: yup.string().trim().url().required(),
-});
+// const schema = yup.object().shape({
+//   alias: yup
+//     .string()
+//     .trim()
+//     .matches(/^[\w\-]+$/i),
+//   url: yup.string().trim().url().required(),
+// });
 
-app.post(
-  "/url",
-  slowDown({
-    windowMs: 30 * 1000,
-    delayAfter: 1,
-    delayMs: 500,
-  }),
-  rateLimit({
-    windowMs: 30 * 1000,
-    max: 1,
-  }),
-  async (req, res, next) => {
+// app.post(
+//   "/url",
+//   slowDown({
+//     windowMs: 30 * 1000,
+//     delayAfter: 1,
+//     delayMs: 500,
+//   }),
+//   rateLimit({
+//     windowMs: 30 * 1000,
+//     max: 1,
+//   }),
+//   async (req, res, next) => {
 
-    console.log(`This response will send details about the ${req.query}.`);
-    console.log(req.query);
+//     console.log(`This response will send details about the ${req.query}.`);
+//     console.log(req.query);
 
-    let {
-      alias,
-      url
-    } = req.body;
-    console.log(">>>>>>>>> alias", alias);
-    console.log(">>>>>>>>> url", url);
-    try {
-      await schema.validate({
-        alias,
-        url,
-      });
-      if (url.includes("https://chiwawer.vercel.app")) {
-        throw new Error("Stop it. 🛑");
-      }
-      if (!alias) {
-        alias = nanoid(5);
-        console.log(">>> nanoid", alias);
-      } else {
-        const existing = await urls.findOne({
-          alias
-        });
-        if (existing) {
-          throw new Error("Alias in use. 🍔");
-        }
-      }
-      alias = alias.toLowerCase();
-      const newUrl = {
-        url,
-        alias,
-      };
-      const created = await urls.insert(newUrl);
-      console.log("created", created);
-      res.json(created);
-    } catch (error) {
-      console.log("error", error);
-      next(error);
-    }
-  }
-);
+//     let {
+//       alias,
+//       url
+//     } = req.body;
+//     console.log(">>>>>>>>> alias", alias);
+//     console.log(">>>>>>>>> url", url);
+//     try {
+//       await schema.validate({
+//         alias,
+//         url,
+//       });
+//       if (url.includes("https://chiwawer.vercel.app")) {
+//         throw new Error("Stop it. 🛑");
+//       }
+//       if (!alias) {
+//         alias = nanoid(5);
+//         console.log(">>> nanoid", alias);
+//       } else {
+//         const existing = await urls.findOne({
+//           alias
+//         });
+//         if (existing) {
+//           throw new Error("Alias in use. 🍔");
+//         }
+//       }
+//       alias = alias.toLowerCase();
+//       const newUrl = {
+//         url,
+//         alias,
+//       };
+//       const created = await urls.insert(newUrl);
+//       console.log("created", created);
+//       res.json(created);
+//     } catch (error) {
+//       console.log("error", error);
+//       next(error);
+//     }
+//   }
+// );
 
 app.use((req, res, next) => {
   res.status(404).sendFile(notFoundPath);
