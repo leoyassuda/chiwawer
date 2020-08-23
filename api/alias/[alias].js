@@ -3,23 +3,33 @@ const monk = require("monk");
 
 require("dotenv").config();
 
-const db = monk(process.env.MONGO_URI);
-const urls = db.get("urls");
+let cachedDB;
 
-db.then(() => {
-  // TODO: see a better structure for class logs
-  logger.info({
-    db: {
-      message: "Connected correctly to server",
-      location: "api/alias/[alias].js",
-      method: "db.callback.connection",
-    },
-    event: {
-      type: "request",
-      tag: "db",
-    },
+async function connectMongo(uri) {
+  if (cachedDB) {
+    return cachedDB;
+  }
+
+  const db = await monk(uri);
+
+  db.then(() => {
+    // TODO: see a better structure for class logs
+    logger.info({
+      db: {
+        message: "Connected correctly to server",
+        location: "api/alias/[alias].js",
+        method: "db.callback.connection",
+      },
+      event: {
+        type: "request",
+        tag: "db",
+      },
+    });
   });
-});
+
+  cachedDB = db;
+  return db;
+}
 
 // api/[alias].js
 module.exports = async (req, res) => {
@@ -39,6 +49,9 @@ module.exports = async (req, res) => {
   });
 
   try {
+    const db = await connectMongo(process.env.MONGO_URI);
+    const urls = db.get("urls");
+
     const url = await urls.findOne(
       {
         alias,
