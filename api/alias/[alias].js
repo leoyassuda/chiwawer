@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
         message: "Error find one [alias]",
         location: "api/alias/[alias].js",
         method: "db.urls.findOne",
-        stack: error,
+        stack: error.message,
       },
       event: {
         type: "request",
@@ -90,9 +90,7 @@ module.exports = async (req, res) => {
     });
     res.status(500).send({
       message: "Something is wrong to find one url",
-      error: error,
+      error: error.message,
     });
-  } finally {
-    db.close();
   }
 };
