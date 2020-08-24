@@ -1,4 +1,5 @@
 // Import Dependencies
+const logger = require("pino")();
 const url = require("url");
 const MongoClient = require("mongodb").MongoClient;
 
@@ -44,6 +45,20 @@ module.exports = async (req, res) => {
 
   // Select the users collection from the database
   const dogs = await collection.find(query).toArray();
+
+  logger.info({
+    db: {
+      message: "Find by name",
+      location: "api/dogs/[name].js",
+      method: "find",
+      query: query,
+      data: dogs,
+    },
+    event: {
+      type: "request",
+      tag: "db",
+    },
+  });
 
   // Respond with a JSON string of all users in the collection
   res.status(200).json({ dogs: dogs });
