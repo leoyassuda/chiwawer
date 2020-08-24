@@ -57,7 +57,7 @@ app.get("/:id", async (req, res, next) => {
             message: "Error to fetch url by alias",
             location: "server/index.js",
             method: "get[id]",
-            stack: error,
+            stack: error.message,
           },
           event: {
             type: "request",
