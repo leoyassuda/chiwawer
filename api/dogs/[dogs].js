@@ -30,7 +30,7 @@ async function connectToDatabase(uri) {
 // dealing with the request and subsequent response
 module.exports = async (req, res) => {
   // Get params
-  const name = req.query.alias;
+  const name = req.query.name;
   const query = {
     name: name,
   };
@@ -46,5 +46,5 @@ module.exports = async (req, res) => {
   const dogs = await collection.find(query).toArray();
 
   // Respond with a JSON string of all users in the collection
-  res.status(200).json({ users: dogs });
+  res.status(200).json({ dogs: dogs });
 };
