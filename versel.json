@@ -1,4 +1,3 @@
 {
-  "version": 2,
-  "routes": [{ "src": "/(<alias>[^/]+)", "dest": "/api/alias/$alias" }]
+  "routes": [{ "src": "/(?<alias>[^/]+)", "dest": "/api/alias?alias=$alias" }]
 }
