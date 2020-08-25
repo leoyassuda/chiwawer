@@ -1,5 +1,29 @@
+const router = new VueRouter({
+  routes: [
+    {
+      path: "/about",
+      redirect: (to) => {
+        window.location.href = "https://www.google.com";
+      },
+    },
+    {
+      path: "/:alias",
+      redirect: (to) => {
+        console.log("alias", to);
+        console.log(
+          "href",
+          window.location.host + `/api/alias/${to.params.alias}`
+        );
+        window.location.href =
+          "http://" + window.location.host + `/api/alias/${to.params.alias}`;
+      },
+    },
+  ],
+});
+
 const app = new Vue({
   el: "#app",
+  router,
   data: {
     url: "",
     alias: "",
@@ -11,7 +35,7 @@ const app = new Vue({
     async createUrl() {
       this.error = "";
       console.log(this.url, this.alias);
-      const response = await fetch("/url", {
+      const response = await fetch("/api/urls", {
         method: "POST",
         headers: {
           "content-type": "application/json",

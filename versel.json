@@ -1,14 +1,4 @@
 {
-  "routes": [
-    {
-      "src": "/url/(?<id>[^/]+)",
-      "methods": ["POST"],
-      "dest": "/index.js/$id"
-    },
-    {
-      "src": "/(?<id>[^/]+)",
-      "methods": ["GET"],
-      "dest": "/index.js/$id"
-    }
-  ]
+  "version": 2,
+  "routes": [{ "src": "/about", "dest": "https://leoyas.com" }]
 }
