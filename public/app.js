@@ -11,7 +11,7 @@ const app = new Vue({
     async createUrl() {
       this.error = "";
       console.log(this.url, this.alias);
-      const response = await fetch("/url", {
+      const response = await fetch("/api/urls", {
         method: "POST",
         headers: {
           "content-type": "application/json",
