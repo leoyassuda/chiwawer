@@ -61,5 +61,6 @@ module.exports = async (req, res) => {
   });
 
   // Respond with a JSON string of all users in the collection
+  res.setHeader("Cache-Control", "s-maxage=3600");
   res.status(200).redirect(url.url);
 };

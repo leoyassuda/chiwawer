@@ -1,3 +1,4 @@
 {
-  "routes": [{ "src": "/(?<id>[^/]+)", "dest": "/api/alias/$id" }]
+  "version": 2,
+  "routes": [{ "src": "/about", "dest": "https://leoyas.com" }]
 }
