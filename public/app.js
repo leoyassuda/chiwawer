@@ -3,7 +3,7 @@ const router = new VueRouter({
     {
       path: "/about",
       redirect: (to) => {
-        window.location.href = "https://www.google.com";
+        window.location.href = "https://www.leoyas.com/";
       },
     },
     {
