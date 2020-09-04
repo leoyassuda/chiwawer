@@ -2,17 +2,15 @@
 
 A simple shortner URL using mongoDB and VueJS
 
-<br/>
-
 ## Cloning the repo
 
-```
+```bash
 git clone https://github.com/leoyassuda/chiwawer.git
 ```
 
 ## Setup
 
-```
+```bash
 cd chiwawer
 npm install
 npm i -g vercel
@@ -36,7 +34,7 @@ This project is based on Atlas to get easier to develop and a free account works
 
 to run local
 
-```
+```bash
 vercel dev
 ```
 
@@ -54,7 +52,7 @@ vercel dev
 
 ---
 
-### Includes API Server utilities:
+### Includes API Server utilities
 
 - [pino-logflare](https://www.npmjs.com/package/pino-logflare)
 
@@ -65,7 +63,7 @@ vercel dev
 - [monk](https://www.npmjs.com/package/monk)
   - A tiny layer that provides simple yet substantial usability improvements for MongoDB usage within Node.JS.
 
-### Development utilities:
+### Development utilities
 
 - [vercel](https://www.npmjs.com/package/vercel)
   - Vercel is the optimal workflow for frontend teams. All-in-one: Static and Jamstack deployment, Serverless Functions, and Global CDN.
