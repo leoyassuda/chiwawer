@@ -1,42 +1,49 @@
+const routes = [
+  {
+    path: '/about', redirect: to => {
+      console.log('>>>>>>>>>route about');
+      window.location.href = 'https://www.leoyas.com';
+    }
+  },
+  // {
+  //   path: '/aliasNotFound',
+  //   props: {
+  //     url: '',
+  //     alias: '',
+  //     error: 'zzzzzzzzzzzzzzzzzz',
+  //     formVisible: true,
+  //     created: null,
+  //   }
+  // },
+  {
+    path: '/:alias', redirect: to => {
+      console.log('alias-to', to);
+      const redirectUrl = window.location.protocol + '//' + window.location.host + `/api/alias/${to.params.alias}`
+      console.log('href', redirectUrl);
+      window.location.href = redirectUrl;
+    }
+  },
+]
+
 const router = new VueRouter({
-  routes: [
-    {
-      path: "/about",
-      redirect: (to) => {
-        window.location.href = "https://www.leoyas.com/";
-      },
-    },
-    {
-      path: "/:alias",
-      redirect: (to) => {
-        console.log("alias", to);
-        console.log(
-          "href",
-          window.location.host + `/api/alias/${to.params.alias}`
-        );
-        window.location.href =
-          "http://" + window.location.host + `/api/alias/${to.params.alias}`;
-      },
-    },
-  ],
+  routes
 });
 
 const app = new Vue({
-  el: "#app",
   router,
   data: {
-    url: "",
-    alias: "",
-    error: "",
+    url: '',
+    alias: '',
+    error: '',
     formVisible: true,
     created: null,
   },
   methods: {
-    async createUrl() {
-      this.error = "";
-      console.log(this.url, this.alias);
-      const response = await fetch("/api/urls", {
-        method: "POST",
+    createUrl: async function () {
+      this.error = '';
+      console.log('Create URL:', this.data);
+      const response = await fetch('/api/urls', {
+        method: 'POST',
         headers: {
           "content-type": "application/json",
         },
@@ -45,22 +52,22 @@ const app = new Vue({
           alias: this.alias || undefined,
         }),
       });
-      console.log("response", response);
+      console.log('post response:', response);
       if (response.ok) {
         const result = await response.json();
-        const href = document.location.href;
+        // const href = document.location.href;
         this.formVisible = false;
-        this.created = `${href}${result.alias}`;
+        // this.created = `${href}${result.alias}`;
       } else if (response.status === 429) {
         this.error =
-          "You are sending too many requests. Try again in 30 seconds.";
+          'You are sending too many requests. Try again in 30 seconds.';
       } else {
         const result = await response.json();
         this.error = result.message;
       }
     },
-  },
-});
+  }
+}).$mount('#app');
 
 //Init tooltips
 tippy("#buttonTheme", {

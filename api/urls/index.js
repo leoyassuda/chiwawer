@@ -1,4 +1,12 @@
-const logger = require("pino")();
+const pino = require('pino');
+const logger = pino({
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true
+    }
+  }
+});
 const yup = require("yup");
 const monk = require("monk");
 const { nanoid } = require("nanoid");
@@ -48,8 +56,8 @@ module.exports = async (req, res) => {
       alias,
       url,
     });
-    if (url.includes("https://chiwawer.vercel.app")) {
-      throw new Error("Stop it. 🛑");
+    if (url.includes('chiwawer.vercel.app') || url.includes('tinyly.link')) {
+      throw new Error("Stop it. 🛑🙅‍♀️");
     }
     if (!alias) {
       alias = nanoid(5);
@@ -58,7 +66,7 @@ module.exports = async (req, res) => {
         alias,
       });
       if (existing) {
-        throw new Error("Alias in use. 🍔");
+        throw new Error("Alias already in use! 🤷‍♀️");
       }
     }
     alias = alias.toLowerCase();
@@ -79,6 +87,7 @@ module.exports = async (req, res) => {
         tag: "db",
       },
     });
+
     res.json(created);
   } catch (error) {
     logger.error({
