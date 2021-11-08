@@ -14,8 +14,7 @@
       href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <!-- development version, includes helpful console warnings -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   </head>
   <body
@@ -64,9 +63,15 @@
             <div class="flex items-center justify-end mt-5">
               <button
                 type="submit"
+                :disabled="loading"
                 class="bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 border-b-4 border-teal-700 hover:border-teal-500 rounded"
               >
-                Create
+                <span v-if="!loading">
+                  Create
+                </span>
+                <span v-if="loading">
+                  Creating...
+                </span>
               </button>
             </div>
             <div
@@ -81,9 +86,9 @@
                   class="flex rounded-full bg-indigo-800 uppercase px-2 py-1 text-xs font-bold mr-3"
                   >Your short url is:
                 </span>
-                <span class="font-semibold mr-2 text-left flex-auto"
-                  ><a :href="created">{{created}}</a></span
-                >
+                <span class="font-semibold mr-2 text-left flex-auto">
+                  <a :href="created">{{created}}</a>
+                </span>
                 <svg
                   class="fill-current opacity-75 h-4 w-4"
                   xmlns="http://www.w3.org/2000/svg"

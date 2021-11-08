@@ -1,3 +1,4 @@
+import AppError from './exceptions/AppError';
 const pino = require('pino');
 const logger = pino({
   transport: {
@@ -66,7 +67,7 @@ module.exports = async (req, res) => {
         alias,
       });
       if (existing) {
-        throw new Error("Alias already in use! 🤷‍♀️");
+        throw new AppError('Alias already in use! 🤷‍♀️', 409);
       }
     }
     alias = alias.toLowerCase();
@@ -89,22 +90,30 @@ module.exports = async (req, res) => {
     });
 
     res.json(created);
-  } catch (error) {
+  } catch (err) {
     logger.error({
       api: {
         message: "Error to create url",
         location: "api/urls/index.js",
         method: "db.urls.insert",
-        stack: error.message,
+        stack: err.message,
       },
       event: {
         type: "request",
         tag: "db",
       },
     });
-    res.status(500).send({
+
+    if (err instanceof AppError) {
+      return res.status(409).send({
+        message: "Alias already exists, please create a new one 🧐",
+        error: err.message
+      });
+    }
+
+    return res.status(500).send({
       message: "Something is wrong to create a url",
-      error: error.message,
+      error: err.message
     });
   }
 };

@@ -1,25 +1,12 @@
 const routes = [
   {
     path: '/about', redirect: to => {
-      console.log('>>>>>>>>>route about');
       window.location.href = 'https://www.leoyas.com';
     }
   },
-  // {
-  //   path: '/aliasNotFound',
-  //   props: {
-  //     url: '',
-  //     alias: '',
-  //     error: 'zzzzzzzzzzzzzzzzzz',
-  //     formVisible: true,
-  //     created: null,
-  //   }
-  // },
   {
     path: '/:alias', redirect: to => {
-      console.log('alias-to', to);
       const redirectUrl = window.location.protocol + '//' + window.location.host + `/api/alias/${to.params.alias}`
-      console.log('href', redirectUrl);
       window.location.href = redirectUrl;
     }
   },
@@ -35,13 +22,14 @@ const app = new Vue({
     url: '',
     alias: '',
     error: '',
+    loading: false,
     formVisible: true,
     created: null,
   },
   methods: {
     createUrl: async function () {
       this.error = '';
-      console.log('Create URL:', this.data);
+      this.loading = true;
       const response = await fetch('/api/urls', {
         method: 'POST',
         headers: {
@@ -52,12 +40,11 @@ const app = new Vue({
           alias: this.alias || undefined,
         }),
       });
-      console.log('post response:', response);
       if (response.ok) {
         const result = await response.json();
-        // const href = document.location.href;
+        const href = document.location.href;
         this.formVisible = false;
-        // this.created = `${href}${result.alias}`;
+        this.created = `${href}${result.alias}`;
       } else if (response.status === 429) {
         this.error =
           'You are sending too many requests. Try again in 30 seconds.';
@@ -65,6 +52,7 @@ const app = new Vue({
         const result = await response.json();
         this.error = result.message;
       }
+      this.loading = false;
     },
   }
 }).$mount('#app');
