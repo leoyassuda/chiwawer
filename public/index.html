@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chiwawer - Shortner urls</title>
+    <title>Tinyly - Shortner urls</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap"
       rel="stylesheet"
@@ -14,12 +14,8 @@
       href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <!-- Google Adsense  -->
-    <script
-      data-ad-client="ca-pub-9279629462259966"
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   </head>
   <body
     class="h-screen antialiased leading-normal tracking-wider bg-auto"
@@ -67,9 +63,15 @@
             <div class="flex items-center justify-end mt-5">
               <button
                 type="submit"
+                :disabled="loading"
                 class="bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 border-b-4 border-teal-700 hover:border-teal-500 rounded"
               >
-                Create
+                <span v-if="!loading">
+                  Create
+                </span>
+                <span v-if="loading">
+                  Creating...
+                </span>
               </button>
             </div>
             <div
@@ -84,9 +86,9 @@
                   class="flex rounded-full bg-indigo-800 uppercase px-2 py-1 text-xs font-bold mr-3"
                   >Your short url is:
                 </span>
-                <span class="font-semibold mr-2 text-left flex-auto"
-                  ><a :href="created">{{created}}</a></span
-                >
+                <span class="font-semibold mr-2 text-left flex-auto">
+                  <a :href="created">{{created}}</a>
+                </span>
                 <svg
                   class="fill-current opacity-75 h-4 w-4"
                   xmlns="http://www.w3.org/2000/svg"
@@ -100,7 +102,7 @@
             </div>
           </form>
           <p id="copyright" class="text-center text-gray-100 text-xs">
-            &copy;2020 leoyas. All rights reserved.
+            &copy;2021 leoyas. All rights reserved.
           </p>
         </div>
       </main>
@@ -114,8 +116,7 @@
         <button class="js-change-theme focus:outline-none">☀️</button>
       </div>
     </div>
-    <script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
-    <script src="https://unpkg.com/vue-router@3.4.3/dist/vue-router.js"></script>
+    
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
     <script src="app.js"></script>

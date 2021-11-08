@@ -1,4 +1,13 @@
-const logger = require("pino")();
+import AppError from './exceptions/AppError';
+const pino = require('pino');
+const logger = pino({
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true
+    }
+  }
+});
 const yup = require("yup");
 const monk = require("monk");
 const { nanoid } = require("nanoid");
@@ -48,8 +57,8 @@ module.exports = async (req, res) => {
       alias,
       url,
     });
-    if (url.includes("https://chiwawer.vercel.app")) {
-      throw new Error("Stop it. 🛑");
+    if (url.includes('chiwawer.vercel.app') || url.includes('tinyly.link')) {
+      throw new Error("Stop it. 🛑🙅‍♀️");
     }
     if (!alias) {
       alias = nanoid(5);
@@ -58,7 +67,7 @@ module.exports = async (req, res) => {
         alias,
       });
       if (existing) {
-        throw new Error("Alias in use. 🍔");
+        throw new AppError('Alias already in use! 🤷‍♀️', 409);
       }
     }
     alias = alias.toLowerCase();
@@ -79,23 +88,32 @@ module.exports = async (req, res) => {
         tag: "db",
       },
     });
+
     res.json(created);
-  } catch (error) {
+  } catch (err) {
     logger.error({
       api: {
         message: "Error to create url",
         location: "api/urls/index.js",
         method: "db.urls.insert",
-        stack: error.message,
+        stack: err.message,
       },
       event: {
         type: "request",
         tag: "db",
       },
     });
-    res.status(500).send({
+
+    if (err instanceof AppError) {
+      return res.status(409).send({
+        message: "Alias already exists, please create a new one 🧐",
+        error: err.message
+      });
+    }
+
+    return res.status(500).send({
       message: "Something is wrong to create a url",
-      error: error.message,
+      error: err.message
     });
   }
 };
